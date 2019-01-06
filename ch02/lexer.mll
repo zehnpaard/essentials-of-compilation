@@ -22,7 +22,7 @@ rule read = parse
   | '-' { SUB }
   | "read" { READ }
   | "let" { LET }
-  | var { VAR }
+  | var { VAR (Lexing.lexeme lexbuf) }
   | white { read lexbuf }
   | _ { raise (SyntaxError ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }
   | eof { EOF }
