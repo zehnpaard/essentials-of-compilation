@@ -4,4 +4,4 @@ type t =
   | Neg of t
   | Add of t * t
 
-type prog = Program t
+type prog = Program of t
