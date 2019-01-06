@@ -1,3 +1,5 @@
+open Ast
+
 let is_leaf = function
   | Int _ -> true
   | Read -> true
