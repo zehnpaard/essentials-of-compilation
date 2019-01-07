@@ -8,5 +8,9 @@ let rec interpret_exp env = function
   | Ast.Neg e -> - (interpret_exp env e)
   | Ast.Add (e1, e2) -> (interpret_exp env e1) + (interpret_exp env e2)
   | Ast.Var x -> lookup env x
+  | Ast.Let (x, e, b) ->
+      let e' = interpret_exp env e in
+      let env' = (x, e') :: env in
+      interpret_exp env' b
 
 let interpret_r0 = function Ast.Program (_, e) -> interpret_exp [] e
