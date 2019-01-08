@@ -19,7 +19,7 @@ type reg =
 type arg =
   | Int of int
   | Reg of reg
-  | Stack of int * reg
+  | Deref of int * reg
 
 type instr =
   | Addq of arg * arg
@@ -30,7 +30,9 @@ type instr =
   | Pushq of arg
   | Popq of arg
   | Retq
-  | Labeled of string * instr
+
+type block =
+  | Block of string * instr list
 
 type prog =
-  | Program of instr list
+  | Program of string * (string * block) list
