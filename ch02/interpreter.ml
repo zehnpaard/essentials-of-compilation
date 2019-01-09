@@ -1,9 +1,9 @@
 let rec lookup env x = match env with
-  | [] -> failwith "Variable " ^ x ^ " not bound"
+  | [] -> failwith ("Variable " ^ x ^ " not bound")
   | (y, v) :: env' -> if x = y then v else lookup env' x
 
 let rec interpret_exp env = function
-  | Ast.Int _ as e -> e
+  | Ast.Int n -> n
   | Ast.Read -> int_of_string (read_line ())
   | Ast.Neg e -> - (interpret_exp env e)
   | Ast.Add (e1, e2) -> (interpret_exp env e1) + (interpret_exp env e2)
