@@ -12,4 +12,5 @@ let () =
     print_endline (string_of_int (Interpreter.interpret_exp [] y));
     print_endline (string_of_t z);
     print_endline (string_of_int (Interpreter.interpret_exp [] z));
+    print_endline (Czero.string_of_tail a);
   end
