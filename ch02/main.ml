@@ -3,6 +3,7 @@ open Ast
 let x = Let ("x", (Int 5), (Add (Let ("x", (Int 10), (Var "x")), Var "x")))
 let y = Uniquify.uniquify [] x
 let z = Decomplex.decomplex_exp y
+let a = Explicate.explicate_tail z
 let () = 
   begin
     print_endline (string_of_t x);
