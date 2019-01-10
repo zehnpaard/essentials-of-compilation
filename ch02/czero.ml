@@ -15,4 +15,4 @@ type tail =
   | Return of exp
   | Seq of stmt * tail
 
-type program = Program of info * (string * tail) list
+type program = Program of string list * (string * tail) list
