@@ -7,3 +7,11 @@ type t =
   | Let of string * t * t
 
 type prog = Program of string list * t
+
+let rec string_of_t = function
+  | Read -> "(read)"
+  | Int n -> string_of_int n
+  | Var s -> s
+  | Neg e -> "(- " ^ string_of_t e ^ ")"
+  | Add (e1, e2) -> "(+ " ^ string_of_t e1 ^ " " ^ string_of_t e2 ^ ")"
+  | Let (s, e', b) -> "(let [" ^ s ^ " " ^ string_of_t e' ^ "] " ^ string_of_t b ^ ")"
