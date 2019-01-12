@@ -5,6 +5,7 @@ let y = Uniquify.uniquify [] x
 let z = Decomplex.decomplex_exp y
 let a = Explicate.explicate_tail z
 let Czero.Program (info, _) = Uncover.uncover_locals (Czero.Program ([], [("start", a)]))
+let b = Select_instructions.convert_tail a
 
 let rec string_of_vars = function
   | [] -> ""
