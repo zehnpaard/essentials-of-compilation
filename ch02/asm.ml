@@ -37,3 +37,19 @@ type block =
 
 type prog =
   | Program of string * (string * block) list
+
+let string_of_arg = function
+  | Int n -> string_of_int n
+  | Reg _ -> "rax" (* fix later *)
+  | Deref (_, _) -> failwith "NotImplemented"
+  | Var s -> s
+
+let string_of_instr = function
+  | Addq (a1, a2) -> "addq " ^ string_of_arg a1 ^ " " ^ string_of_arg a2 ^ "\n"
+  | Subq (a1, a2) -> "subq " ^ string_of_arg a1 ^ " " ^ string_of_arg a2 ^ "\n"
+  | Movq (a1, a2) -> "movq " ^ string_of_arg a1 ^ " " ^ string_of_arg a2 ^ "\n"
+  | Negq a -> "negq " ^ string_of_arg a ^ "\n"
+  | Pushq a -> "pushq " ^ string_of_arg a ^ "\n"
+  | Popq a -> "popq " ^ string_of_arg a ^ "\n"
+  | Callq f -> "callq " ^ f ^ "\n"
+  | Retq -> "return\n"
