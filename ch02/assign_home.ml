@@ -11,7 +11,14 @@ let rec assign_home' env out = function
   | Retq as instr :: xs -> instr :: assign_home' env out xs
   | Callq _ as instr :: xs  -> instr :: assign_home' env out xs
   | Negq a :: xs -> Negq (convert_arg env a) :: assign_home' env out xs
-  | _ -> []
+  | Pushq a :: xs -> Pushq (convert_arg env a) :: assign_home' env out xs
+  | Popq a :: xs -> Popq (convert_arg env a) :: assign_home' env out xs
+  | Addq (a, b) :: xs ->
+      Addq (convert_arg env a, convert_arg env b) :: assign_home' env out xs
+  | Subq (a, b) :: xs ->
+      Subq (convert_arg env a, convert_arg env b) :: assign_home' env out xs
+  | Movq (a, b) :: xs ->
+      Movq (convert_arg env a, convert_arg env b) :: assign_home' env out xs
 
 
 let assign_home locals instrs =
