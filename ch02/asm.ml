@@ -20,6 +20,7 @@ type arg =
   | Int of int
   | Reg of reg
   | Deref of int * reg
+  | Var of string
 
 type instr =
   | Addq of arg * arg
