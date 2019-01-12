@@ -6,6 +6,7 @@ let z = Decomplex.decomplex_exp y
 let a = Explicate.explicate_tail z
 let Czero.Program (info, _) = Uncover.uncover_locals (Czero.Program ([], [("start", a)]))
 let b = Select_instructions.convert_tail a
+let c = Assign_home.assign_home info b
 
 let rec string_of_vars = function
   | [] -> ""
@@ -23,4 +24,6 @@ let () =
     print_endline (Czero.string_of_tail a);
     print_endline (string_of_vars info);
     List.iter print_string (List.map Asm.string_of_instr b);
+    print_endline "";
+    List.iter print_string (List.map Asm.string_of_instr c);
   end
