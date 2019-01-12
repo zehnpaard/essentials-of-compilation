@@ -22,4 +22,5 @@ let () =
     print_endline (string_of_int (Interpreter.interpret_exp [] z));
     print_endline (Czero.string_of_tail a);
     print_endline (string_of_vars info);
+    List.iter print_string (List.map Asm.string_of_instr b);
   end
