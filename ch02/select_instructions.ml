@@ -10,6 +10,8 @@ let convert_exp v e = match v, e with
     | _, Czero.Read -> [Asm.Callq read_int; Asm.Movq (Asm.Reg Asm.Rax) v]
     | Asm.Var s1, Czero.Atom (Czero.Var s2) when s1 = s2 -> []
     | _, Czero.Atom a -> [Asm.Movq (convert_arg a) v]
+    | Asm.Var s1, Czero.Neg (Czero.Var s2) when s1 = s2 -> [Asm.Negq v]
+    | _, Czero.Neg a -> [Asm.Movq (convert_arg a) v; Asm.Negq v]
 
 let convert_arg = function
     | Czero.Int n -> Asm.Int n
