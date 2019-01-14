@@ -24,12 +24,12 @@ let string_of_arg = function
 let string_of_exp = function
   | Atom a -> string_of_arg a
   | Read -> "(read)"
-  | Neg a -> "(- " ^ string_of_arg a ^ ")"
-  | Add (a1, a2) -> string_of_arg a1 ^ " + " ^ string_of_arg a2
+  | Neg a -> Printf.sprintf "(- %s)" (string_of_arg a)
+  | Add (a1, a2) -> Printf.sprintf "%s + %s" (string_of_arg a1) (string_of_arg a2)
 
 let string_of_stmt = function
-  | Assign (a, e) -> "assign " ^ string_of_arg a ^ " " ^ string_of_exp e ^ "\n"
+  | Assign (a, e) -> Printf.sprintf "assign %s %s\n" (string_of_arg a) (string_of_exp e)
 
 let rec string_of_tail = function
-  | Return e -> "return " ^ string_of_exp e ^ "\n"
+  | Return e -> Printf.sprintf "return %s\n" (string_of_exp e)
   | Seq (s, t) -> string_of_stmt s ^ string_of_tail t
