@@ -59,17 +59,17 @@ let string_of_reg = function
 let string_of_arg = function
   | Int n -> string_of_int n
   | Reg r -> string_of_reg r
-  | Deref (i, r) -> string_of_int i ^ "(" ^ string_of_reg r ^ ")"
+  | Deref (i, r) -> Printf.sprintf "%s(%s)" (string_of_int i) (string_of_reg r)
   | Var s -> s
 
 let string_of_instr = function
-  | Addq (a1, a2) -> "addq " ^ string_of_arg a1 ^ " " ^ string_of_arg a2 ^ "\n"
-  | Subq (a1, a2) -> "subq " ^ string_of_arg a1 ^ " " ^ string_of_arg a2 ^ "\n"
-  | Movq (a1, a2) -> "movq " ^ string_of_arg a1 ^ " " ^ string_of_arg a2 ^ "\n"
-  | Negq a -> "negq " ^ string_of_arg a ^ "\n"
-  | Pushq a -> "pushq " ^ string_of_arg a ^ "\n"
-  | Popq a -> "popq " ^ string_of_arg a ^ "\n"
-  | Callq f -> "callq " ^ f ^ "\n"
+  | Addq (a1, a2) -> Printf.sprintf "addq %s %s\n" (string_of_arg a1) (string_of_arg a2)
+  | Subq (a1, a2) -> Printf.sprintf "subq %s %s\n" (string_of_arg a1) (string_of_arg a2)
+  | Movq (a1, a2) -> Printf.sprintf "movq %s %s\n" (string_of_arg a1) (string_of_arg a2)
+  | Negq a -> Printf.sprintf "negq %s\n" (string_of_arg a)
+  | Pushq a -> Printf.sprintf "pushq %s\n" (string_of_arg a)
+  | Popq a -> Printf.sprintf "popq %s\n" (string_of_arg a)
+  | Callq f -> Printf.sprintf "callq %s\n" f
   | Retq -> "return\n"
 
 let rec string_of_instrs = function
