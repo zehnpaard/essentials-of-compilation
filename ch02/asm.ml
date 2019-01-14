@@ -36,7 +36,7 @@ type block =
   | Block of string * instr list
 
 type prog =
-  | Program of string * (string * block) list
+  | Program of string list * (string * block) list
 
 let string_of_reg = function
   | Rsp -> "%rsp"
@@ -71,3 +71,12 @@ let string_of_instr = function
   | Popq a -> "popq " ^ string_of_arg a ^ "\n"
   | Callq f -> "callq " ^ f ^ "\n"
   | Retq -> "return\n"
+
+let rec string_of_instrs = function
+  | [] -> ""
+  | x :: xs -> "\t" ^ string_of_instr x ^ string_of_instrs xs
+
+let string_of_prog = function
+  | Program (_, [_, Block (_, instrs)]) ->
+      "start:\n" ^ string_of_instrs instrs ^ "\tjmp conclusion\n\n\t.globl main\nmain:\n\tpushq\t%rbp\n\tmovq\t%rsp, %rbp\n\tsubq\t$16, %rsp\n\tjmp start\nconclusion:\n\taddq\t$16, %rsp\n\tpopq\t%rbp\n\tretq"
+  | _ -> failwith "Unknown"
