@@ -77,6 +77,8 @@ let rec string_of_instrs = function
   | x :: xs -> "\t" ^ string_of_instr x ^ string_of_instrs xs
 
 let string_of_prog = function
-  | Program (_, [_, Block (_, instrs)]) ->
-      "start:\n" ^ string_of_instrs instrs ^ "\tjmp conclusion\n\n\t.globl main\nmain:\n\tpushq\t%rbp\n\tmovq\t%rsp, %rbp\n\tsubq\t$16, %rsp\n\tjmp start\nconclusion:\n\taddq\t$16, %rsp\n\tpopq\t%rbp\n\tretq"
+  | Program (labels, [_, Block (_, instrs)]) ->
+      let n = List.length labels in
+      let s = string_of_int (8 * (n+1)) in
+      "start:\n" ^ string_of_instrs instrs ^ "\tjmp conclusion\n\n\t.globl main\nmain:\n\tpushq\t%rbp\n\tmovq\t%rsp, %rbp\n\tsubq\t$" ^ s ^ ", %rsp\n\tjmp start\nconclusion:\n\taddq\t$" ^ s ^ ", %rsp\n\tpopq\t%rbp\n\tretq"
   | _ -> failwith "Unknown"
