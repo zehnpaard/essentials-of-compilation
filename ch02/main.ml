@@ -8,6 +8,8 @@ let Czero.Program (info, _) = Uncover.uncover_locals (Czero.Program ([], [("star
 let b = Select_instructions.convert_tail a
 let c = Assign_home.assign_home info b
 let d = Patch_instructions.patch c
+let e = Asm.Program (info, [("", Asm.Block ("", d))])
+
 
 let rec string_of_vars = function
   | [] -> ""
@@ -29,4 +31,5 @@ let () =
     List.iter print_string (List.map Asm.string_of_instr c);
     print_endline "";
     List.iter print_string (List.map Asm.string_of_instr d);
+    print_endline (Asm.string_of_prog e);
   end
