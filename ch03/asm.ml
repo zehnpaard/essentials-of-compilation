@@ -33,7 +33,7 @@ type instr =
   | Retq
 
 type block =
-  | Block of string * instr list
+  | Block of (string list) list * instr list
 
 type prog =
   | Program of string list * (string * block) list
