@@ -33,3 +33,18 @@ let string_of_stmt = function
 let rec string_of_tail = function
   | Return e -> Printf.sprintf "return %s\n" (string_of_exp e)
   | Seq (s, t) -> string_of_stmt s ^ string_of_tail t
+
+let rec string_of_nts = function
+  | [] -> ""
+  | (label, tail) :: nts ->
+      Printf.sprintf "%s\n%s\n" label (string_of_tail tail) ^ string_of_nts nts
+
+let rec string_of_info' = function
+  | [] -> ""
+  | [s] -> s
+  | s :: ss -> s ^ ", " ^ string_of_info' ss
+
+let string_of_info info = Printf.sprintf "(%s)" (string_of_info' info)
+
+let string_of_prog = function Program (info, named_tails) ->
+  Printf.sprintf "Program:\n%s\n%s\n" (string_of_info info) (string_of_nts named_tails)
