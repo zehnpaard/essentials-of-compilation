@@ -23,3 +23,6 @@ let rec explicate_tail e = match e with
       Return (convert_exp e)
   | Ast.Let (s, e', b) ->
       explicate_assign e' s (explicate_tail b)
+
+let f = function Ast.Program (_, e) ->
+  Program ([], [("", explicate_tail e)])
