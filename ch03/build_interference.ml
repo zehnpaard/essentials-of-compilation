@@ -1,5 +1,10 @@
 open Asm
 
+let rec h_arith d = function
+  | [] -> []
+  | v :: vs when v = d -> h_arith d vs
+  | v :: vs -> (if v < d then (Var v, Var d) else (Var d, Var v)) :: h_arith d vs
+
 let g res l_after = function
   | Addq (_, Var d) | Subq  (_, Var d) | Negq (Var d) -> h_arith d l_after :: res
   | Callq _ -> h_callq l_after :: res
