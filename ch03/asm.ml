@@ -32,8 +32,13 @@ type instr =
   | Popq of arg
   | Retq
 
+type info = {live: (string list) list option;
+             interference: (arg * arg) list option}
+
+let empty_info = {live=None; interference=None}
+
 type block =
-  | Block of (string list) list * instr list
+  | Block of info * instr list
 
 type prog =
   | Program of string list * (string * block) list
