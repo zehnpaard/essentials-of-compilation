@@ -2,7 +2,7 @@ open Asm
 
 module S = Set.Make(struct let compare = compare type t = int end)
 
-let edge_to_graph edges =
+let edges_to_graph edges =
   let graph = Hashtbl.create 100 in
   let add_one_dir v1 v2 =
     let curr = match Hashtbl.find_opt graph v1 with
@@ -38,4 +38,14 @@ let color graph =
     colors
   end
 
-let f = function Program _ as p -> p
+let modify_block (Block (info, instrs)) = match info.interference with
+  | Some interference ->
+    let colors = color (edges_to_graph interference) in
+    let info' = {info with colors=Some colors} in
+    Block (info', instrs)
+  | None -> failwith "Attempting graph coloring with no interference information"
+
+let modify_nb (s, block) = (s, modify_block block)
+
+let f = function Program (info, nbs) ->
+  Program (info, List.map modify_nb nbs)
