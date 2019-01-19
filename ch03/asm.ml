@@ -33,9 +33,10 @@ type instr =
   | Retq
 
 type info = {live: (string list) list option;
-             interference: (arg * arg) list option}
+             interference: (arg * arg) list option;
+             colors: (arg, int) Hashtbl.t option}
 
-let empty_info = {live=None; interference=None}
+let empty_info = {live=None; interference=None; colors=None}
 
 type block =
   | Block of info * instr list
