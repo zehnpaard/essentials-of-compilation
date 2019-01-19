@@ -1,5 +1,7 @@
 open Asm
 
+module S = Set.Make(struct let compare = compare type t = int end)
+
 let edge_to_graph edges =
   let graph = Hashtbl.create 100 in
   let add_one_dir v1 v2 =
@@ -13,3 +15,15 @@ let edge_to_graph edges =
     add_one_dir v1 v2; add_one_dir v2 v1
   in
   List.iter add_edge_to_graph edges; graph
+
+let find_min_absent xs =
+  let ys = S.of_list xs in
+  let rec f n = if S.mem n ys then f (n+1) else n in
+  f 0
+
+let color graph =
+  let nodes = Hashtbl.to_seq_keys graph |> List.of_seq in
+  let colors = Hashtbl.create (List.length nodes) in
+  colors
+
+let f = function Program _ as p -> p
