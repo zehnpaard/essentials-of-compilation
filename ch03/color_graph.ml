@@ -21,9 +21,19 @@ let find_min_absent xs =
   let rec f n = if S.mem n ys then f (n+1) else n in
   f 0
 
+let process_node graph colors saturation node =
+  let c = find_min_absent (Hashtbl.find saturation node) in
+  let f node1 = Hashtbl.replace saturation node1 (c :: Hashtbl.find saturation node1) in
+  begin
+    Hashtbl.add colors node c;
+    List.iter f (Hashtbl.find graph node)
+  end
+
+
 let color graph =
   let nodes = Hashtbl.to_seq_keys graph |> List.of_seq in
   let colors = Hashtbl.create (List.length nodes) in
-  colors
+  let saturation = Hashtbl.of_seq (List.to_seq (List.map (fun n -> (n, [])) nodes)) in
+  colors, saturation
 
 let f = function Program _ as p -> p
