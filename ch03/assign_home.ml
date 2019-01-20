@@ -20,7 +20,12 @@ let rec assign_home' env out = function
   | Movq (a, b) :: xs ->
       Movq (convert_arg env a, convert_arg env b) :: assign_home' env out xs
 
-
 let assign_home locals instrs =
   let env = List.mapi (fun i v -> (v, - 8 * (i+1))) locals in
   assign_home' env [] instrs
+
+let convert_block locals (label, (Block (info, instrs))) =
+  (label, Block (info, assign_home locals instrs))
+
+let f = function Program (info, nbs) ->
+  Program (info, List.map (convert_block info) nbs)
