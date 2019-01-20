@@ -7,7 +7,10 @@ let convert_arg colors a = match a with
   | Reg _ -> a
   | Deref _ -> a
   | Var _ ->
-    let n = Hashtbl.find colors a in
+    let n = (match Hashtbl.find_opt colors a with
+      | Some x -> x
+      | None -> 0)
+    in
     if n < Array.length usable_regs
     then Reg usable_regs.(n)
     else a
