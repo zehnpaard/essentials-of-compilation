@@ -11,6 +11,7 @@ let asmp1 = Select_instructions.f czp2
 let asmp2 = Uncover_live.f asmp1
 let asmp2 = Build_interference.f asmp2
 let asmp2 = Color_graph.f asmp2
+let asmp2 = Allocate_reg.f asmp2
 let asmp3 = Assign_home.f asmp2
 let asmp4 = Patch_instructions.f asmp3
 
