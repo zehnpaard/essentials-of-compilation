@@ -38,9 +38,14 @@ let color graph =
     colors
   end
 
+let is_var_edge = function
+  | (Var _, Var _) -> true
+  | _ -> false
+
 let modify_block (Block (info, instrs)) = match info.interference with
   | Some interference ->
-    let colors = color (edges_to_graph interference) in
+    let edges = List.filter is_var_edge interference in
+    let colors = color (edges_to_graph edges) in
     let info' = {info with colors=Some colors} in
     Block (info', instrs)
   | None -> failwith "Attempting graph coloring with no interference information"
