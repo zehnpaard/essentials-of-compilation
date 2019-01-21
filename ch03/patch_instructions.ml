@@ -13,5 +13,5 @@ let rec patch = function
 let convert_block (label, (Block (info, instrs))) =
   (label, Block (info, patch instrs))
 
-let f = function Program (info, nbs) ->
+let f (Program (info, nbs)) =
   Program (info, List.map convert_block nbs)

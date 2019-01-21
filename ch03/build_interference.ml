@@ -20,6 +20,7 @@ let g res l_after = function
   | Addq (_, Var d) | Subq  (_, Var d) | Negq (Var d) -> h_arith d l_after @ res
   | Callq _ -> h_callq l_after @ res
   | Movq (Var s, Var d) -> h_movq s d l_after @ res
+  | Movq (_, Var d) -> h_arith d l_after @ res
   | Addq _ | Subq _ | Negq _ | Movq _ | Pushq _ | Popq _ | Retq -> res
 
 let build lives instrs =
@@ -35,5 +36,5 @@ let modify_block (Block (info, instrs)) = match info.live with
 
 let modify_nb (s, block) = (s, modify_block block)
 
-let f = function Program (info, nbs) ->
+let f (Program (info, nbs)) =
   Program (info, List.map modify_nb nbs)

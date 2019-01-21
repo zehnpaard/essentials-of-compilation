@@ -37,5 +37,5 @@ let allocate_regs info instrs =
 let convert_block (label, (Block (info, instrs))) =
   (label, Block (info, allocate_regs info instrs))
 
-let f = function Program (info, nbs) ->
+let f (Program (info, nbs)) =
   Program (info, List.map convert_block nbs)

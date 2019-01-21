@@ -20,6 +20,6 @@ and decomplex_arg ti e = match e with
       let t = "tmp." ^ string_of_int (ti := !ti + 1; !ti) in
       (Var t, [(t, decomplex_exp ti e)])
 
-let f =
+let f (Program (info, e)) =
   let ti = ref 0 in
-  function Program (info, e) -> Program (info, decomplex_exp ti e)
+  Program (info, decomplex_exp ti e)

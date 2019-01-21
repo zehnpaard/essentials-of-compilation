@@ -18,5 +18,5 @@ let find_in_nbs res (_, (Block (_, instrs))) =
 
 let find_locals nbs = List.fold_left find_in_nbs [] nbs
 
-let f = function Program (_, nbs) ->
+let f (Program (_, nbs)) =
   Program (find_locals nbs, nbs)
