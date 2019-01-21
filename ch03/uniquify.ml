@@ -20,6 +20,6 @@ let rec uniquify numbers env e = match e with
       let env' = (v, n) :: env in
       Let (v ^ string_of_int n, e'', uniquify numbers env' b)
 
-let f =
+let f (Program (info, e)) =
   let numbers = Hashtbl.create 100 in
-  function Program (info, e) -> Program (info, uniquify numbers [] e)
+  Program (info, uniquify numbers [] e)
