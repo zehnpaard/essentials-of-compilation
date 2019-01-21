@@ -27,5 +27,5 @@ let assign_home locals instrs =
 let convert_block locals (label, (Block (info, instrs))) =
   (label, Block (info, assign_home locals instrs))
 
-let f = function Program (info, nbs) ->
+let f (Program (info, nbs)) =
   Program (info, List.map (convert_block info) nbs)

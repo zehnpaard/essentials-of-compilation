@@ -23,4 +23,5 @@ let process_named_block (label, (Block (info, instrs))) =
   let info' = {info with live=Some live_vars} in
   (label, Block (info', instrs))
 
-let f = function Program (info, nbs) -> Program (info, List.map process_named_block nbs)
+let f (Program (info, nbs)) =
+  Program (info, List.map process_named_block nbs)

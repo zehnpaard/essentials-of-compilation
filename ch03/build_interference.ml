@@ -35,5 +35,5 @@ let modify_block (Block (info, instrs)) = match info.live with
 
 let modify_nb (s, block) = (s, modify_block block)
 
-let f = function Program (info, nbs) ->
+let f (Program (info, nbs)) =
   Program (info, List.map modify_nb nbs)

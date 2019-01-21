@@ -25,5 +25,5 @@ let rec convert_tail = function
 let convert_block (label, tail) =
   (label, Asm.Block (Asm.empty_info, convert_tail tail))
 
-let f = function Czero.Program (info, nts) ->
+let f (Czero.Program (info, nts)) =
   Asm.Program (info, List.map convert_block nts)
