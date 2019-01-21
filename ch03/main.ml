@@ -16,12 +16,10 @@ let asmp4 = Patch_instructions.f asmp3
 
 let () = 
   begin
-    print_endline (string_of_prog astp);
-    print_endline (string_of_prog astp2);
-    print_endline (string_of_prog astp3);
-    print_endline (Czero.string_of_prog czp1);
     print_endline (Asm.string_of_prog asmp1);
-    print_endline (Asm.string_of_prog asmp2);
-    print_endline (Asm.string_of_prog asmp3);
+    print_endline (Asm.string_of_prog_block_info asmp1);
     print_endline (Asm.string_of_prog asmp4);
+    print_endline (Asm.string_of_prog_block_info asmp4);
+    print_endline (Asm.string_of_prog (Compile.f astp));
+    print_endline (Asm.string_of_prog_block_info (Compile.f astp));
   end
