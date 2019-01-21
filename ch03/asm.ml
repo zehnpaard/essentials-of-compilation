@@ -88,3 +88,35 @@ let string_of_prog = function
       let s = string_of_int (8 * (n+1)) in
       "start:\n" ^ string_of_instrs instrs ^ "\tjmp conclusion\n\n\t.globl main\nmain:\n\tpushq\t%rbp\n\tmovq\t%rsp, %rbp\n\tsubq\t$" ^ s ^ ", %rsp\n\tjmp start\nconclusion:\n\taddq\t$" ^ s ^ ", %rsp\n\tpopq\t%rbp\n\tretq"
   | _ -> failwith "Unknown"
+
+let string_of_live = function
+  | None -> "()"
+  | Some xss ->
+    let f xs = Printf.sprintf "(%s)\n" (String.concat "," xs) in
+    String.concat "" (List.map f xss)
+
+
+let string_of_interference = function
+  | None -> "()"
+  | Some as' ->
+    let f (a1, a2) = Printf.sprintf "%s, %s\n" (string_of_arg a1) (string_of_arg a2) in
+    String.concat "" (List.map f as')
+
+let string_of_colors = function
+  | None -> "()"
+  | Some as' ->
+    let f (a, n) = Printf.sprintf "%s, %d\n" (string_of_arg a) n in
+    Hashtbl.to_seq as'
+    |> Seq.map f
+    |> List.of_seq
+    |> String.concat ""
+
+let string_of_block_info info =
+  let slive = string_of_live info.live in
+  let sinterference = string_of_interference info.interference in
+  let scolors = string_of_colors info.colors in
+  Printf.sprintf "Live:\n%s\nInterference:\n%s\nColors:\n%s\n" slive sinterference scolors
+
+let string_of_prog_block_info (Program (_, nbs)) =
+  let f (_, Block (info, _)) = string_of_block_info info in
+  String.concat "" (List.map f nbs)
