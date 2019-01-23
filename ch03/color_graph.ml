@@ -25,6 +25,9 @@ let color graph =
   let nodes = Hashtbl.to_seq_keys graph |> List.of_seq in
   let colors = Hashtbl.create (List.length nodes) in
   let saturation = Hashtbl.of_seq (List.to_seq (List.map (fun n -> (n, [])) nodes)) in
+  let choose_node nodes =
+    List.hd nodes (* Fix later *)
+  in
   let process_node node =
     let c = find_min_absent (Hashtbl.find saturation node) in
     let f node1 = Hashtbl.replace saturation node1 (c :: Hashtbl.find saturation node1) in
@@ -33,10 +36,14 @@ let color graph =
       List.iter f (Hashtbl.find graph node)
     end
   in
-  begin
-    List.iter process_node nodes; (* Needs work, inefficient *)
-    colors
-  end
+  let rec process = function
+    | [] -> colors
+    | nodes ->
+      let node = choose_node nodes in
+      let nodes' = List.filter ((<>) node) nodes in
+      (process_node node; process nodes')
+  in
+  process nodes
 
 let is_var_edge = function
   | (Var _, Var _) -> true
