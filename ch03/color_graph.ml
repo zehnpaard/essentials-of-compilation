@@ -25,8 +25,18 @@ let color graph =
   let nodes = Hashtbl.to_seq_keys graph |> List.of_seq in
   let colors = Hashtbl.create (List.length nodes) in
   let saturation = Hashtbl.of_seq (List.to_seq (List.map (fun n -> (n, [])) nodes)) in
+  let rec max_ node v = function
+    | [] -> node
+    | node' :: nodes ->
+      let v' = List.length (Hashtbl.find saturation node') in
+      if v' > v
+      then max_ node' v' nodes
+      else max_ node v nodes
+  in
   let choose_node nodes =
-    List.hd nodes (* Fix later *)
+    let n = List.hd nodes in
+    let v = List.length (Hashtbl.find saturation n) in
+    max_ n v (List.tl nodes)
   in
   let process_node node =
     let c = find_min_absent (Hashtbl.find saturation node) in
