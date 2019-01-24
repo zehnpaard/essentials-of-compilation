@@ -21,22 +21,38 @@ let find_min_absent xs =
   let rec f n = if S.mem n ys then f (n+1) else n in
   f 0
 
+let max_ ~keyf xs =
+  let g (a, x) b =
+    let y = keyf b in
+    if x < y then (b, y) else (a, x)
+  in
+  let hd = List.hd xs in
+  let (a, _) = List.fold_left g (hd, keyf hd) xs in
+  a
+
 let color graph =
   let nodes = Hashtbl.to_seq_keys graph |> List.of_seq in
   let colors = Hashtbl.create (List.length nodes) in
   let saturation = Hashtbl.of_seq (List.to_seq (List.map (fun n -> (n, [])) nodes)) in
+  let get_saturation = Hashtbl.find saturation in
+  let get_saturation_count node = List.length (get_saturation node) in
+  let choose_node = max_ ~keyf:get_saturation_count in
   let process_node node =
-    let c = find_min_absent (Hashtbl.find saturation node) in
-    let f node1 = Hashtbl.replace saturation node1 (c :: Hashtbl.find saturation node1) in
+    let c = find_min_absent (get_saturation node) in
+    let f node' = Hashtbl.replace saturation node' (c :: get_saturation node') in
     begin
       Hashtbl.add colors node c;
       List.iter f (Hashtbl.find graph node)
     end
   in
-  begin
-    List.iter process_node nodes; (* Needs work, inefficient *)
-    colors
-  end
+  let rec process = function
+    | [] -> colors
+    | nodes ->
+      let node = choose_node nodes in
+      let nodes' = List.filter ((<>) node) nodes in
+      (process_node node; process nodes')
+  in
+  process nodes
 
 let is_var_edge = function
   | (Var _, Var _) -> true
