@@ -21,26 +21,25 @@ let find_min_absent xs =
   let rec f n = if S.mem n ys then f (n+1) else n in
   f 0
 
-let rec max_ saturation node v = function
-  | [] -> node
-  | node' :: nodes ->
-    let v' = List.length (Hashtbl.find saturation node') in
-    if v' > v
-    then max_ saturation node' v' nodes
-    else max_ saturation node v nodes
+let max_ ~keyf xs =
+  let g (a, x) b =
+    let y = keyf b in
+    if x < y then (b, y) else (a, x)
+  in
+  let hd = List.hd xs in
+  let (a, _) = List.fold_left g (hd, keyf hd) xs in
+  a
 
 let color graph =
   let nodes = Hashtbl.to_seq_keys graph |> List.of_seq in
   let colors = Hashtbl.create (List.length nodes) in
   let saturation = Hashtbl.of_seq (List.to_seq (List.map (fun n -> (n, [])) nodes)) in
-  let choose_node nodes =
-    let n = List.hd nodes in
-    let v = List.length (Hashtbl.find saturation n) in
-    max_ saturation n v (List.tl nodes)
-  in
+  let get_saturation = Hashtbl.find saturation in
+  let get_saturation_count node = List.length (get_saturation node) in
+  let choose_node = max_ ~keyf:get_saturation_count in
   let process_node node =
-    let c = find_min_absent (Hashtbl.find saturation node) in
-    let f node1 = Hashtbl.replace saturation node1 (c :: Hashtbl.find saturation node1) in
+    let c = find_min_absent (get_saturation node) in
+    let f node' = Hashtbl.replace saturation node' (c :: get_saturation node') in
     begin
       Hashtbl.add colors node c;
       List.iter f (Hashtbl.find graph node)
